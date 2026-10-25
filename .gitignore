@@ -1,0 +1,12 @@
+node_modules/
+.vercel/
+.env
+.env.*
+!.env.example
+private/
+private-*.json
+grades.json
+*.log
+.DS_Store
+Thumbs.db
+

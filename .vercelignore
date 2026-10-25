@@ -1,0 +1,12 @@
+.git/
+node_modules/
+.env
+.env.*
+private/
+private-*.json
+grades.json
+test/
+scripts/
+*.log
+README.md
+
