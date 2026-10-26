@@ -7,9 +7,48 @@ const loading = $('loading'), result = $('result'), notFound = $('not-found'), r
 const validationError = $('validation-error'), stage = $('envelope-stage');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const activeAnimations = new Set();
-const REVEAL_DELAY_MIN_MS = 4000;
-const REVEAL_DELAY_MAX_MS = 6000;
+const REVEAL_DELAY_MIN_MS = 6000;
+const REVEAL_DELAY_MAX_MS = 9000;
 let state = 'idle', confettiTimer;
+
+// Original meme-style captions. The jokes never depend on the student or grade.
+const SUSPENSE_MEMES = [
+    'The suspense has entered the chat.',
+    'Let the envelope cook…',
+    'Main character entrance loading.',
+    'The loading dots are doing their best.',
+    'The envelope requested a dramatic entrance.',
+    'Tiny envelope. Big production budget.',
+    'No spoilers. Even from the dots.',
+    'One envelope. Oscar-level drama.',
+    'The drumroll is doing overtime.',
+    'POV: the envelope has lore.',
+    'The envelope understood the assignment.',
+    'The confetti is waiting for its cue.'
+];
+let suspenseTimer;
+let lastMeme = '';
+function stopSuspenseMessages() {
+    clearTimeout(suspenseTimer);
+    suspenseTimer = undefined;
+}
+function startSuspenseMessages() {
+    stopSuspenseMessages();
+    let bag = [];
+    // Reserve two text lines so changing captions does not shift the envelope.
+    $('loading-title').style.minHeight = '2.3em';
+    function nextMeme() {
+        if (bag.length === 0) bag = [...SUSPENSE_MEMES];
+        let index = Math.floor(Math.random() * bag.length);
+        if (bag[index] === lastMeme && bag.length > 1) index = (index + 1) % bag.length;
+        lastMeme = bag.splice(index, 1)[0];
+        $('loading-title').textContent = lastMeme;
+        // Only the title rotates. The live status stays tied to the real request.
+        suspenseTimer = setTimeout(nextMeme, 2000);
+    }
+    nextMeme();
+}
+
 reduceMotion.addEventListener('change', event => {
     if (!event.matches) return;
     activeAnimations.forEach(animation => animation.finish());
@@ -31,6 +70,7 @@ function clearValidation() {
 }
 input.addEventListener('input', clearValidation);
 function clearResult() {
+    stopSuspenseMessages();
     clearTimeout(confettiTimer);
     for (const id of ['result-section', 'result-heading', 'result-name', 'result-id', 'result-grade', 'result-subject', 'envelope-grade']) $(id).textContent = '';
     result.hidden = true; $('confetti').replaceChildren(); stage.dataset.phase = 'waiting';
@@ -159,9 +199,12 @@ form.addEventListener('submit', async event => {
         $('loading-title').textContent = 'Your envelope is on its way…';
         $('loading-copy').textContent = 'Finding your midterm result.';
         loading.hidden = false; loading.focus({ preventScroll: true });
+        startSuspenseMessages();
         const outcome = await lookup;
         if (outcome.kind === 'found') {
+            $('loading-copy').textContent = 'Your envelope is ready. Cue the tiny drumroll.';
             await waitForReveal(Math.max(0, revealDelay - (performance.now() - startedAt)));
+            stopSuspenseMessages();
             await openEnvelope(outcome.record);
             loading.hidden = true; form.removeAttribute('aria-busy'); revealResult(outcome.record);
         } else {
@@ -176,6 +219,7 @@ form.addEventListener('submit', async event => {
         $('request-error-copy').textContent = 'We couldn’t show your result. Please try again.';
         requestError.hidden = false; requestError.focus({ preventScroll: true });
     } finally {
+        stopSuspenseMessages();
         form.removeAttribute('aria-busy'); input.disabled = false; revealButton.disabled = false; state = 'done';
     }
 });
