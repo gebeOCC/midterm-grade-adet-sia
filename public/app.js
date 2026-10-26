@@ -6,21 +6,18 @@ const form = $('lookup-form'), input = $('student-id'), revealButton = $('reveal
 const loading = $('loading'), result = $('result'), notFound = $('not-found'), requestError = $('request-error');
 const validationError = $('validation-error'), stage = $('envelope-stage');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const activeAnimations = new Set(), pendingPauses = new Set();
+const activeAnimations = new Set();
+const REVEAL_DELAY_MIN_MS = 4000;
+const REVEAL_DELAY_MAX_MS = 6000;
 let state = 'idle', confettiTimer;
 reduceMotion.addEventListener('change', event => {
     if (!event.matches) return;
     activeAnimations.forEach(animation => animation.finish());
-    pendingPauses.forEach(finish => finish());
     $('confetti').replaceChildren();
 });
-function motionPause(ms) {
-    if (reduceMotion.matches || ms <= 0) return Promise.resolve();
-    return new Promise(resolve => {
-        const finish = () => { clearTimeout(timer); pendingPauses.delete(finish); resolve(); };
-        const timer = setTimeout(finish, ms);
-        pendingPauses.add(finish);
-    });
+// The suspense timing applies independently of motion preferences.
+function waitForReveal(ms) {
+    return ms > 0 ? new Promise(resolve => setTimeout(resolve, ms)) : Promise.resolve();
 }
 async function animate(element, frames, duration, easing = 'ease-out', fadeOnly = false) {
     if (typeof element.animate !== 'function' || (reduceMotion.matches && !fadeOnly)) return;
@@ -153,6 +150,8 @@ form.addEventListener('submit', async event => {
     state = 'searching'; clearResult(); requestError.hidden = true; notFound.hidden = true;
     revealButton.disabled = true; input.disabled = true; form.setAttribute('aria-busy', 'true');
     const startedAt = performance.now();
+    // Choose once per valid lookup, independently of the student or grade.
+    const revealDelay = REVEAL_DELAY_MIN_MS + Math.floor(Math.random() * (REVEAL_DELAY_MAX_MS - REVEAL_DELAY_MIN_MS + 1));
     const lookup = requestGrade(enteredId); // Fetch starts before the animation.
     try {
         await animate(form, [{ opacity: 1 }, { opacity: 0 }], 180, 'ease-out', true);
@@ -162,7 +161,7 @@ form.addEventListener('submit', async event => {
         loading.hidden = false; loading.focus({ preventScroll: true });
         const outcome = await lookup;
         if (outcome.kind === 'found') {
-            await motionPause(Math.max(0, 650 - (performance.now() - startedAt)));
+            await waitForReveal(Math.max(0, revealDelay - (performance.now() - startedAt)));
             await openEnvelope(outcome.record);
             loading.hidden = true; form.removeAttribute('aria-busy'); revealResult(outcome.record);
         } else {
