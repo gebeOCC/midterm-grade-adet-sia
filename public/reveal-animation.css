@@ -38,3 +38,11 @@
  .envelope-stage .envelope,.envelope-stage .envelope-letter,.envelope-stage .envelope-flap { transform:none!important; }
  .confetti { display:none; }
 }
+
+/* A compact post-reveal reaction. The grade always stays fully visible. */
+.grade-reaction { display:flex; align-items:center; justify-content:center; gap:14px; min-height:124px; margin:16px 0 0; padding:4px 8px; }
+.reaction-frame { flex:0 0 112px; width:112px; height:112px; display:grid; place-items:center; }
+.reaction-frame img { display:block; width:112px; height:112px; object-fit:cover; object-position:50% 60%; border-radius:10px; }
+.grade-reaction figcaption { max-width:170px; color:var(--muted,#52655c); font:italic 14px/1.5 Georgia,serif; text-wrap:balance; }
+@media(max-width:360px) { .grade-reaction { gap:10px; padding-inline:0; } .reaction-frame,.reaction-frame img { width:88px; height:100px; } .reaction-frame { flex-basis:88px; } .grade-reaction figcaption { font-size:12px; } }
+

@@ -90,10 +90,92 @@ function startSuspenseMessages() {
     nextMeme();
 }
 
+
+// Same reaction pool for every grade. Assets are local; no live meme embeds.
+const REACTION_STICKERS = [
+    { id: 'black-cat-clapping', alt: 'A black cat clapping', caption: 'A tiny round of applause.' },
+    { id: 'thumbs-up-cat', alt: 'A cat giving a thumbs-up', caption: 'One milestone down. Keep going.' },
+    { id: 'dancing-cat', alt: 'A little pink cat dancing', caption: 'A tiny dance for your next chapter.' },
+    { id: 'bongo-cat', alt: 'Bongo Cat playing a little drumroll', caption: 'Your very own tiny drumroll.' }
+].map(sticker => ({
+    ...sticker,
+    animated: './assets/reactions/' + sticker.id + '.gif',
+    still: './assets/reactions/' + sticker.id + '.png'
+}));
+let reactionIntroTimer, reactionFreezeTimer;
+let currentReaction = null;
+let lastReactionId = '';
+let reactionGeneration = 0;
+
+function clearReactionSticker() {
+    reactionGeneration++;
+    clearTimeout(reactionIntroTimer);
+    clearTimeout(reactionFreezeTimer);
+    reactionIntroTimer = reactionFreezeTimer = undefined;
+    currentReaction = null;
+    const image = $('reaction-image');
+    image.onload = image.onerror = null;
+    image.removeAttribute('src');
+    image.alt = '';
+    image.hidden = true;
+    $('reaction-caption').textContent = '';
+    $('grade-reaction').hidden = true;
+}
+function freezeReactionSticker() {
+    clearTimeout(reactionIntroTimer);
+    clearTimeout(reactionFreezeTimer);
+    reactionIntroTimer = reactionFreezeTimer = undefined;
+    if (!currentReaction || result.hidden) return;
+    const image = $('reaction-image');
+    image.hidden = false;
+    image.alt = currentReaction.alt;
+    if (image.getAttribute('src') !== currentReaction.still) image.src = currentReaction.still;
+}
+function showReactionSticker() {
+    clearReactionSticker();
+    const candidates = REACTION_STICKERS.filter(sticker => sticker.id !== lastReactionId);
+    const sticker = candidates[Math.floor(Math.random() * candidates.length)];
+    currentReaction = sticker;
+    lastReactionId = sticker.id;
+    const generation = reactionGeneration;
+    const panel = $('grade-reaction'), image = $('reaction-image');
+    panel.hidden = false;
+    $('reaction-caption').textContent = sticker.caption;
+    image.alt = sticker.alt;
+    image.onload = () => {
+        if (generation !== reactionGeneration || currentReaction !== sticker) return;
+        if (!reduceMotion.matches && image.getAttribute('src') === sticker.animated) {
+            clearTimeout(reactionFreezeTimer);
+            // Hold a matching still after four seconds of actual GIF playback.
+            reactionFreezeTimer = setTimeout(freezeReactionSticker, 4000);
+        }
+    };
+    image.onerror = () => {
+        if (generation !== reactionGeneration || currentReaction !== sticker) return;
+        clearTimeout(reactionFreezeTimer);
+        reactionFreezeTimer = undefined;
+        if (image.getAttribute('src') !== sticker.still) image.src = sticker.still;
+        else clearReactionSticker(); // A missing sticker must never hide the grade.
+    };
+    const enter = () => {
+        reactionIntroTimer = undefined;
+        if (generation !== reactionGeneration || currentReaction !== sticker || result.hidden) return;
+        image.hidden = false;
+        image.src = reduceMotion.matches ? sticker.still : sticker.animated;
+        if (!reduceMotion.matches) void animate(panel, [
+            { opacity: 0, transform: 'translateY(7px) scale(.97)' },
+            { opacity: 1, transform: 'translateY(0) scale(1)' }
+        ], 260);
+    };
+    if (reduceMotion.matches) enter();
+    else reactionIntroTimer = setTimeout(enter, 420);
+}
+
 reduceMotion.addEventListener('change', event => {
     if (!event.matches) return;
     activeAnimations.forEach(animation => animation.finish());
     $('confetti').replaceChildren();
+    freezeReactionSticker();
 });
 // The suspense timing applies independently of motion preferences.
 function waitForReveal(ms) {
@@ -111,6 +193,7 @@ function clearValidation() {
 }
 input.addEventListener('input', clearValidation);
 function clearResult() {
+    clearReactionSticker();
     stopSuspenseMessages();
     clearTimeout(confettiTimer);
     for (const id of ['result-section', 'result-heading', 'result-name', 'result-id', 'result-grade', 'result-subject', 'envelope-grade']) $(id).textContent = '';
@@ -153,6 +236,7 @@ function revealResult(record) {
         { opacity: 1, transform: 'translateY(0) scale(1)' }
     ], 350);
     celebrate();
+    showReactionSticker();
 }
 async function requestGrade(studentId) {
     const controller = new AbortController();

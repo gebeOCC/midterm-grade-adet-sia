@@ -8,6 +8,14 @@ const PROJECT_DIRECTORY = fileURLToPath(new URL('../', import.meta.url));
 const VERCEL_CONFIGURATION = JSON.parse(await readFile(path.join(PROJECT_DIRECTORY, 'vercel.json'), 'utf8'));
 const STATIC_HEADERS = Object.fromEntries(VERCEL_CONFIGURATION.headers[0].headers.map(({ key, value }) => [key, value]));
 const PUBLIC_FILES = new Map([
+    ['/assets/reactions/black-cat-clapping.gif', ['assets/reactions/black-cat-clapping.gif', 'image/gif']],
+    ['/assets/reactions/black-cat-clapping.png', ['assets/reactions/black-cat-clapping.png', 'image/png']],
+    ['/assets/reactions/thumbs-up-cat.gif', ['assets/reactions/thumbs-up-cat.gif', 'image/gif']],
+    ['/assets/reactions/thumbs-up-cat.png', ['assets/reactions/thumbs-up-cat.png', 'image/png']],
+    ['/assets/reactions/dancing-cat.gif', ['assets/reactions/dancing-cat.gif', 'image/gif']],
+    ['/assets/reactions/dancing-cat.png', ['assets/reactions/dancing-cat.png', 'image/png']],
+    ['/assets/reactions/bongo-cat.gif', ['assets/reactions/bongo-cat.gif', 'image/gif']],
+    ['/assets/reactions/bongo-cat.png', ['assets/reactions/bongo-cat.png', 'image/png']],
     ['/', ['index.html', 'text/html; charset=utf-8']],
     ['/index.html', ['index.html', 'text/html; charset=utf-8']],
     ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
