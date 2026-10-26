@@ -12,6 +12,7 @@ const PUBLIC_FILES = new Map([
     ['/index.html', ['index.html', 'text/html; charset=utf-8']],
     ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
     ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
+    ['/reveal-animation.css', ['reveal-animation.css', 'text/css; charset=utf-8']],
 ]);
 
 // A cancellable bridge drains oversized input instead of destroying the HTTP response socket.
