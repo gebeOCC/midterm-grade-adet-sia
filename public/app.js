@@ -142,14 +142,7 @@ function showReactionSticker() {
     panel.hidden = false;
     $('reaction-caption').textContent = sticker.caption;
     image.alt = sticker.alt;
-    image.onload = () => {
-        if (generation !== reactionGeneration || currentReaction !== sticker) return;
-        if (!reduceMotion.matches && image.getAttribute('src') === sticker.animated) {
-            clearTimeout(reactionFreezeTimer);
-            // Hold a matching still after four seconds of actual GIF playback.
-            reactionFreezeTimer = setTimeout(freezeReactionSticker, 4000);
-        }
-    };
+    image.onload = null;
     image.onerror = () => {
         if (generation !== reactionGeneration || currentReaction !== sticker) return;
         clearTimeout(reactionFreezeTimer);
