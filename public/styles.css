@@ -1,0 +1,508 @@
+:root {
+    color-scheme: light;
+    --ink: #173f36;
+    --muted: #52655c;
+    --paper: #fffdf7;
+    --line: #daddcc;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: var(--ink);
+    background: #eff0e5;
+    font-synthesis: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    min-width: 280px;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: wait;
+    opacity: .65;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid #8b6631;
+    outline-offset: 4px;
+}
+
+.page {
+    max-width: 1180px;
+    margin: auto;
+    padding: 30px 44px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 650;
+    letter-spacing: -.7px;
+}
+
+.brandmark {
+    display: grid;
+    place-items: center;
+    width: 37px;
+    height: 37px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 11px;
+    font: italic 28px Georgia, serif;
+}
+
+.header-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #577a50;
+}
+
+main {
+    min-height: calc(100svh - 120px);
+    display: grid;
+    place-items: center;
+    padding: 58px 0 65px;
+}
+
+.portal-wrap {
+    width: min(100%, 480px);
+    position: relative;
+}
+
+.portal {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid #cdd3bf;
+    border-radius: 22px;
+    background: var(--paper);
+    box-shadow: 0 16px 48px #2d422510, 0 3px 0 #e0e3d4;
+    overflow: hidden;
+}
+
+.portal-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 17px 30px;
+    border-bottom: 1px solid var(--line);
+    background: #f8f8ef;
+}
+
+.portal-caption {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.45px;
+    text-transform: uppercase;
+}
+
+.mini-spark {
+    width: 17px;
+    height: 17px;
+    color: #577a50;
+}
+
+.sticker {
+    position: absolute;
+    top: -41px;
+    right: -39px;
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+    transform: rotate(13deg);
+}
+
+.sticker svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.sticker-label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    line-height: 1.5;
+}
+
+form,
+.result,
+.not-found {
+    padding: 34px 34px 28px;
+    min-height: 430px;
+}
+
+h2 {
+    font: 400 clamp(27px, 5vw, 34px)/1.15 Georgia, 'Times New Roman', serif;
+    letter-spacing: -1.1px;
+    margin: 18px 0 10px;
+    text-wrap: balance;
+}
+
+.description,
+.loading-copy {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin: 0 0 27px;
+}
+
+.form-icon {
+    width: 45px;
+    height: 45px;
+    padding: 9px;
+    border: 1px solid #dce1ce;
+    border-radius: 13px;
+    background: #eef2e4;
+    color: #41684d;
+}
+
+.form-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.input-wrap {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-prefix {
+    position: absolute;
+    left: 16px;
+    color: #7b8979;
+    pointer-events: none;
+    font-size: 18px;
+}
+
+input {
+    width: 100%;
+    min-width: 0;
+    height: 53px;
+    padding: 12px 16px 12px 39px;
+    color: var(--ink);
+    background: white;
+    border: 1px solid #bfcab7;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+input::placeholder {
+    color: #7a857a;
+}
+
+input[aria-invalid='true'] {
+    border-color: #a83e31;
+}
+
+.format-note {
+    margin: 9px 0 24px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.error {
+    color: #9c3428;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: -10px 0 18px;
+}
+
+.primary {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 13px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.primary:hover {
+    background: #265646;
+}
+
+.primary svg {
+    width: 19px;
+    height: 19px;
+}
+
+.quiet-note {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.5;
+    margin: 17px 0 0;
+    text-align: center;
+}
+
+.quiet-note svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.loading {
+    padding: 18px 28px 30px;
+    min-height: 430px;
+    text-align: center;
+}
+
+.loading h2 {
+    max-width: 350px;
+    margin: 4px auto 12px;
+    font-size: 29px;
+}
+
+.loading-copy {
+    margin: 0 auto 14px;
+    min-height: 22px;
+}
+
+.loading:focus,
+.result:focus,
+.not-found:focus {
+    outline: none;
+}
+
+.result-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .35px;
+}
+
+.result-meta>span:first-child {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #577a50;
+}
+
+.result h2 {
+    margin-top: 19px;
+}
+
+.student-info {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 24px;
+    overflow-wrap: anywhere;
+}
+
+.grade-card {
+    border: 1px solid #d0d9bf;
+    border-radius: 12px;
+    background: #edf2e2;
+    padding: 18px 23px 0;
+}
+
+.grade-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.grade-number {
+    font: 400 70px/1.12 Georgia, serif;
+    letter-spacing: -4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.grade-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+
+.subject-name {
+    border-top: 1px solid #d0d9bf;
+    padding: 13px 0 14px;
+    margin-top: 15px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.result-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 21px 0 18px;
+}
+
+.secondary {
+    border: 0;
+    padding: 8px 0;
+    background: transparent;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 650;
+    text-align: left;
+}
+
+.secondary:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.not-found-id {
+    display: inline-block;
+    font-family: monospace;
+    background: #f1f1e7;
+    padding: 7px 10px;
+    border-radius: 6px;
+    margin: 6px 0 20px;
+}
+
+.not-found h2 {
+    margin-bottom: 15px;
+}
+
+.not-found .description {
+    margin-bottom: 17px;
+}
+
+.server-note {
+    padding: 12px;
+    color: #70482a;
+    background: #fff0db;
+    border: 1px solid #ebcc9e;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.demo-banner {
+    max-width: 480px;
+    padding: 13px 17px;
+    margin: 24px auto -20px;
+    border: 1px dashed #b3be9f;
+    border-radius: 10px;
+    background: #f7f8ee;
+    font-size: 11px;
+    line-height: 1.65;
+    color: var(--muted);
+}
+
+.demo-banner strong {
+    color: var(--ink);
+}
+
+.demo-banner label {
+    margin: 8px 0 4px;
+}
+
+.demo-banner select {
+    max-width: 100%;
+    padding: 6px 8px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid #bfcab7;
+    border-radius: 6px;
+    font: inherit;
+}
+
+@media(max-width:600px) {
+    .page {
+        padding: 23px 22px;
+    }
+
+    main {
+        padding: 62px 0 35px;
+        min-height: calc(100svh - 105px);
+    }
+
+    .sticker {
+        width: 82px;
+        height: 82px;
+        right: -6px;
+        top: -39px;
+    }
+
+    .sticker-label {
+        font-size: 7.5px;
+    }
+
+    .portal-top {
+        padding: 16px 24px;
+    }
+
+    form,
+    .result,
+    .not-found {
+        padding: 28px 24px 25px;
+        min-height: 430px;
+    }
+
+    .portal-caption {
+        font-size: 9px;
+        letter-spacing: 1.1px;
+    }
+
+    .demo-banner {
+        margin-bottom: -26px;
+    }
+}
