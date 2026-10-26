@@ -8,7 +8,7 @@
     <meta name="description"
         content="A little drumroll for your hard work. Find your midterm subject grade using your student ID.">
     <title>Midterm — a little reveal</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
@@ -18,22 +18,6 @@
             <div class="header-note"><span class="live-dot" aria-hidden="true"></span>Grade portal</div>
         </header>
         <main>
-            <section aria-labelledby="page-title">
-                <div class="eyebrow">The midterm moment</div>
-                <h1 id="page-title">Big effort.<br>A little <em>suspense.</em></h1>
-                <p class="intro-copy">You put in the work. Now for the reveal.<br>Enter your student ID to find your
-                    subject grade, with a few playful surprises along the way.</p>
-                <div class="steps" aria-label="How it works">
-                    <div class="step"><span>01</span>Enter your ID</div>
-                    <div class="step"><span>02</span>Tiny drumroll</div>
-                    <div class="step"><span>03</span>Your grade</div>
-                </div>
-                <div class="handwritten" aria-hidden="true">A little moment for your hard work.<svg viewBox="0 0 48 36"
-                        fill="none">
-                        <path d="M2 6C13 0 10 28 30 23L44 16M36 13L45 16L42 25" stroke="currentColor" stroke-width="1.5"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg></div>
-            </section>
             <section class="portal-wrap" aria-label="Student grade lookup">
                 <div class="sticker" aria-hidden="true"><svg viewBox="0 0 100 100">
                         <path
@@ -56,9 +40,10 @@
                                     stroke-width="1.5" stroke-linecap="round" />
                             </svg></div>
                         <h2>Let’s find your grade.</h2>
-                        <p class="description">One student ID. A little mystery. Your reveal.</p>
+                        <p class="description">Your effort, one little envelope away.</p>
                         <p class="server-note" id="server-note" hidden>This version connects to a backend. Open your
-                            deployed website, or start the local server described in the README.</p>
+                            deployed website, or use these files with your existing grade server. For an animation
+                            preview, open demo.html.</p>
                         <label for="student-id">Student ID number</label>
                         <div class="input-wrap"><span class="input-prefix" aria-hidden="true">#</span><input
                                 id="student-id" name="student-id" type="text" inputmode="text" autocomplete="off"
@@ -76,19 +61,28 @@
                                 <path d="M8 4V8L10.5 9.5" stroke="currentColor" stroke-linecap="round" />
                             </svg>One click. A little suspense. Your grade.</p>
                     </form>
-                    <div class="loading" id="loading" role="status" aria-live="polite" hidden>
-                        <div class="drumroll" aria-hidden="true"><span class="orbit"></span>
-                            <div class="envelope"><svg viewBox="0 0 40 40" fill="none">
-                                    <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor"
-                                        stroke-width="1.5" />
-                                    <path d="M5 10L20 22L35 10M5 30L15 21M35 30L25 21" stroke="currentColor"
-                                        stroke-width="1.5" stroke-linejoin="round" />
-                                </svg></div>
+                    <div class="loading" id="loading" tabindex="-1" aria-labelledby="loading-title" hidden>
+                        <div class="envelope-stage" id="envelope-stage" data-phase="waiting" aria-hidden="true">
+                            <span class="envelope-halo"></span><span class="envelope-shadow"></span>
+                            <span class="envelope-spark spark-one">✦</span><span
+                                class="envelope-spark spark-two">✧</span>
+                            <div class="envelope-shell">
+                                <div class="envelope" id="envelope">
+                                    <div class="envelope-back"></div>
+                                    <div class="envelope-letter" id="envelope-letter"><span class="letter-caption">Your
+                                            midterm</span><span class="letter-grade" id="envelope-grade"></span><span
+                                            class="letter-rule"></span></div>
+                                    <div class="envelope-front"></div>
+                                    <div class="envelope-flap" id="envelope-flap"></div>
+                                    <span class="envelope-seal">✦</span>
+                                </div>
+                            </div>
                         </div>
-                        <h2 id="loading-title">A little suspense…</h2>
-                        <p class="loading-copy" id="loading-copy">Finding your little envelope…</p>
-                        <div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
-                        <p class="quiet-note">Good things deserve a little suspense.</p>
+                        <h2 id="loading-title">Your envelope is on its way…</h2>
+                        <p class="loading-copy" id="loading-copy" role="status" aria-live="polite" aria-atomic="true">
+                            Finding your midterm result.</p>
+                        <div class="loading-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+                        <p class="quiet-note">A little envelope. One step forward.</p>
                     </div>
                     <div class="result" id="result" tabindex="-1" aria-labelledby="result-heading" hidden>
                         <div class="result-meta"><span aria-hidden="true"></span>Midterm result <span
@@ -109,7 +103,7 @@
                                 <path d="M20 20L27 27M11 14H17" stroke="currentColor" stroke-width="1.5"
                                     stroke-linecap="round" />
                             </svg></div>
-                        <h2 id="not-found-heading">That ID is playing hide & seek.</h2><span class="not-found-id"
+                        <h2 id="not-found-heading">Let’s double-check that ID.</h2><span class="not-found-id"
                             id="not-found-id"></span>
                         <p class="description">We couldn’t find a matching student in this roster. Check your full ID
                             and give it another try.</p>
@@ -132,25 +126,8 @@
                 </div>
             </section>
         </main>
-        <section class="coverage" aria-label="Included subjects and sections">
-            <div class="coverage-label">On the<br>grade list</div>
-            <div class="course"><span class="course-num" aria-hidden="true">01</span>
-                <div>
-                    <div class="course-title">Application Development and Emerging Technologies</div>
-                    <div class="course-section">Sections 3C & 3D</div>
-                </div>
-            </div>
-            <div class="course"><span class="course-num" aria-hidden="true">02</span>
-                <div>
-                    <div class="course-title">System Integration and Architecture 1</div>
-                    <div class="course-section">Section 3E</div>
-                </div>
-            </div>
-        </section>
-        <footer class="footer"><span>Made for your midterm moment.</span><span class="footer-quote">A grade is a
-                milestone. Keep growing.</span></footer>
     </div>
-    <script src="/app.js" defer></script>
+    <script src="./app.js" defer></script>
 </body>
 
 </html>
